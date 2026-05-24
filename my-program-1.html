@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>برنامج mer24797</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ===== SHARED BASE ===== */
+  :root {
+    --bg: #0a0a0a;
+    --card: #111;
+    --card2: #181818;
+    --border: #222;
+    --push: #ff6b35;
+    --pull: #3b9eff;
+    --legs: #a855f7;
+    --rest: #444;
+    --text: #f0f0f0;
+    --muted: #666;
+    --accent: #fff;
+    --green: #22c55e;
+    --orange: #f0a500;
+    --orange2: #ffd166;
+    --blue: #58a6ff;
+    --red: #f85149;
+    --purple: #bc8cff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    padding-top: 0;
+    padding-bottom: 80px;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #0a0a0aee;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 56px;
+    gap: 8px;
+  }
+  .navbar-brand {
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--push);
+    flex: 1;
+    white-space: nowrap;
+  }
+  .navbar-brand span { color: var(--text); font-weight: 400; font-size: 0.75rem; margin-right: 6px; }
+  .nav-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn.active-workout { background: var(--push); color: #fff; border-color: var(--push); }
+  .nav-btn.active-diet { background: var(--orange); color: #000; border-color: var(--orange); }
+
+  /* ===== PAGES ===== */
+  .page { display: none; padding: 20px 14px 20px; }
+  .page.active { display: block; }
+
+
+  /* ===== WEIGHT LOG ===== */
+  .weight-log {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .weight-input {
+    flex: 1;
+    background: #0d0d0d;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    color: #f0f0f0;
+    outline: none;
+    direction: rtl;
+    transition: border-color 0.2s;
+  }
+  .weight-input:focus { border-color: #f0a500; }
+  .weight-input::placeholder { color: #444; font-size: 0.75rem; }
+  .weight-saved {
+    font-size: 0.72rem;
+    color: #22c55e;
+    font-weight: 700;
+    white-space: nowrap;
+    min-width: 60px;
+  }
+
+  /* ===== WORKOUT CSS ===== */
+
+  :root {
+    --bg: #0a0a0a;
+    --card: #111;
+    --card2: #181818;
+    --border: #222;
+    --push: #ff6b35;
+    --pull: #3b9eff;
+    --legs: #a855f7;
+    --rest: #444;
+    --text: #f0f0f0;
+    --muted: #666;
+    --accent: #fff;
+    --green: #22c55e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    padding: 20px 14px 60px;
+  }
+
+  header {
+    text-align: center;
+    padding: 20px 0 24px;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-size: 1.9rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+  header h1 span { color: var(--push); }
+  header p { color: var(--muted); font-size: 0.83rem; margin-top: 5px; }
+
+  /* WEEK OVERVIEW */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 24px;
+  }
+  .week-day {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .week-day.push { border-top: 3px solid var(--push); }
+  .week-day.pull { border-top: 3px solid var(--pull); }
+  .week-day.legs { border-top: 3px solid var(--legs); }
+  .week-day.rest { border-top: 3px solid var(--rest); opacity: 0.5; }
+  .week-day.active { transform: scale(1.05); box-shadow: 0 0 0 2px #fff2; }
+  .week-day .wd-name { font-size: 0.68rem; color: var(--muted); font-weight: 700; }
+  .week-day .wd-type { font-size: 0.62rem; margin-top: 3px; font-weight: 800; }
+  .week-day.push .wd-type { color: var(--push); }
+  .week-day.pull .wd-type { color: var(--pull); }
+  .week-day.legs .wd-type { color: var(--legs); }
+  .week-day.rest .wd-type { color: var(--rest); }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .leg-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .tab {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .tab.push.active { background: var(--push); color: #fff; border-color: var(--push); }
+  .tab.pull.active { background: var(--pull); color: #fff; border-color: var(--pull); }
+  .tab.legs.active { background: var(--legs); color: #fff; border-color: var(--legs); }
+
+  /* DAY CONTENT */
+  .day-content { display: none; }
+  .day-content.active { display: block; }
+
+  .day-header {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .day-header-info h2 { font-size: 1.2rem; font-weight: 900; }
+  .day-header-info p { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+  .day-header-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+  .push-badge { background: #ff6b3520; color: var(--push); border: 1px solid #ff6b3540; }
+  .pull-badge { background: #3b9eff20; color: var(--pull); border: 1px solid #3b9eff40; }
+  .legs-badge { background: #a855f720; color: var(--legs); border: 1px solid #a855f740; }
+
+  /* NOTE for Sunday */
+  .day-note {
+    background: #1a1200;
+    border: 1px solid #3a2800;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+    color: #f0a500;
+  }
+
+  /* EXERCISE */
+  .exercise {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 8px;
+  }
+  .ex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .ex-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+  .push .ex-num { background: #ff6b3525; color: var(--push); }
+  .pull .ex-num { background: #3b9eff25; color: var(--pull); }
+  .legs .ex-num { background: #a855f725; color: var(--legs); }
+
+  .ex-info { flex: 1; }
+  .ex-name { font-weight: 800; font-size: 0.92rem; }
+  .ex-muscle { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  .ex-sets {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .set-box {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .set-box span { color: var(--muted); font-weight: 400; font-size: 0.72rem; }
+
+  .ex-tip {
+    margin-top: 8px;
+    font-size: 0.75rem;
+    color: #5a8a5a;
+    border-right: 2px solid var(--green);
+    padding-right: 8px;
+    line-height: 1.5;
+  }
+
+  .ex-meta {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .weight-badge {
+    background: #1a1400;
+    border: 1px solid #3a2f00;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    color: #f0c040;
+    font-weight: 700;
+  }
+  .yt-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #1a0a0a;
+    border: 1px solid #3a1010;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    color: #ff4444;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .yt-link:hover { background: #2a1010; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 16px 0 8px;
+    padding-right: 4px;
+  }
+
+  /* CARDIO */
+  .cardio-box {
+    background: #0a1a0a;
+    border: 1px solid #1a3a1a;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 6px;
+  }
+  .cardio-box h4 { font-size: 0.88rem; font-weight: 800; color: var(--green); margin-bottom: 8px; }
+  .cardio-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #aaa;
+    padding: 4px 0;
+    border-bottom: 1px solid #1a2a1a;
+  }
+  .cardio-row:last-child { border-bottom: none; }
+  .cardio-val { color: var(--green); font-weight: 700; }
+
+  /* REST TIMES */
+  .rest-guide {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 14px;
+  }
+  .rest-guide h4 { font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; color: var(--muted); }
+  .rest-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: #ccc;
+  }
+  .rest-row:last-child { border-bottom: none; }
+  .rest-time { color: #f0a500; font-weight: 700; }
+
+  /* GENERAL TIPS */
+  .tips-box {
+    margin-top: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .tips-box h3 { font-size: 0.9rem; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
+  .tip-item {
+    display: flex;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: #aaa;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+
+  /* ===== DIET CSS ===== */
+  .macros-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .macro-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .macro-box .val { font-size: 1.2rem; font-weight: 900; display: block; }
+  .macro-box .lbl { font-size: 0.7rem; color: var(--muted); margin-top: 2px; display: block; }
+  .c1 .val { color: var(--orange); }
+  .c2 .val { color: var(--blue); }
+  .c3 .val { color: var(--green); }
+  .c4 .val { color: var(--red); }
+
+  .alts-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .alts-section h3 { font-size: 0.9rem; font-weight: 800; color: var(--orange2); margin-bottom: 12px; }
+  .alt-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .alt-row:last-child { border-bottom: none; }
+  .alt-old { color: var(--muted); text-decoration: line-through; flex: 1; }
+  .alt-arrow { color: var(--orange); font-size: 0.9rem; }
+  .alt-new { color: var(--text); font-weight: 700; flex: 1.5; }
+  .alt-why { color: var(--muted); font-size: 0.73rem; flex: 1.5; }
+
+  .diet-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .diet-tab {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 7px 14px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.18s;
+    flex-shrink: 0;
+  }
+  .diet-tab.active { background: var(--orange); color: #000; border-color: var(--orange); }
+
+  .diet-day { display: none; }
+  .diet-day.active { display: block; }
+
+  .diet-day-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .meal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-right: 4px solid transparent;
+  }
+  .meal.m1 { border-right-color: var(--orange); }
+  .meal.m2 { border-right-color: var(--blue); }
+  .meal.m3 { border-right-color: var(--green); }
+  .meal.m4 { border-right-color: var(--purple); }
+  .meal.m5 { border-right-color: var(--red); }
+
+  .meal-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .meal-name { font-weight: 800; font-size: 0.95rem; }
+  .meal-time {
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: var(--card2);
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+  .meal-cals { font-size: 0.75rem; color: var(--orange); font-weight: 700; margin-bottom: 8px; }
+
+  .items { display: flex; flex-direction: column; gap: 4px; }
+  .item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.83rem;
+    padding: 4px 0;
+    border-bottom: 1px solid #1c2128;
+    color: #cdd9e5;
+  }
+  .item:last-child { border-bottom: none; }
+  .item-amt { color: var(--muted); font-size: 0.78rem; font-weight: 600; }
+
+  .meal-tip {
+    margin-top: 9px;
+    background: #1a1f0a;
+    border-right: 3px solid var(--green);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 0.77rem;
+    color: #8db87a;
+    line-height: 1.6;
+  }
+
+  .day-footer {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .day-footer-lbl { font-size: 0.82rem; color: var(--muted); font-weight: 700; }
+  .day-footer-val { font-size: 1.05rem; font-weight: 900; color: var(--orange); }
+
+  .water {
+    background: #0d1a2a;
+    border: 1px solid #1a3050;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--blue);
+    text-align: center;
+  }
+
+  .diet-tips-box {
+    margin-top: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .diet-tips-box h3 { font-size: 0.95rem; font-weight: 800; color: var(--orange); margin-bottom: 12px; }
+  .diet-tip-row {
+    display: flex;
+    gap: 10px;
+    font-size: 0.83rem;
+    color: #adbac7;
+    line-height: 1.6;
+    margin-bottom: 9px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="navbar-brand"><span>برنامج</span>mer24797 💪</div>
+  <button class="nav-btn active-workout" id="nav-workout" onclick="switchPage('workout')">🏋️ التمرين</button>
+  <button class="nav-btn" id="nav-diet" onclick="switchPage('diet')">🍽️ الدايت</button>
+</div>
+
+<!-- ===== WORKOUT PAGE ===== -->
+<div class="page active" id="page-workout">
+
+
+<div style="height:8px"></div>
+
+<!-- WEEK OVERVIEW -->
+<div class="week-grid">
+  <div class="week-day push" onclick="showDay('push1')">
+    <div class="wd-name">سبت</div>
+    <div class="wd-type">PUSH</div>
+  </div>
+  <div class="week-day pull" onclick="showDay('pull1')">
+    <div class="wd-name">أحد</div>
+    <div class="wd-type">PULL</div>
+  </div>
+  <div class="week-day legs" onclick="showDay('legs1')">
+    <div class="wd-name">اتنين</div>
+    <div class="wd-type">LEGS</div>
+  </div>
+  <div class="week-day rest">
+    <div class="wd-name">تلات</div>
+    <div class="wd-type">REST</div>
+  </div>
+  <div class="week-day push" onclick="showDay('push2')">
+    <div class="wd-name">أربع</div>
+    <div class="wd-type">PUSH</div>
+  </div>
+  <div class="week-day pull" onclick="showDay('pull2')">
+    <div class="wd-name">خميس</div>
+    <div class="wd-type">PULL</div>
+  </div>
+  <div class="week-day rest">
+    <div class="wd-name">جمعة</div>
+    <div class="wd-type">REST</div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:var(--push)"></div>Push — صدر + كتف + ترايسبس</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--pull)"></div>Pull — ظهر + بايسبس</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--legs)"></div>Legs — أرجل + Core</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab push active" onclick="showDay('push1', this)">السبت — Push 1</button>
+  <button class="tab pull" onclick="showDay('pull1', this)">الأحد — Pull 1</button>
+  <button class="tab legs" onclick="showDay('legs1', this)">الاتنين — Legs</button>
+  <button class="tab push" onclick="showDay('push2', this)">الأربع — Push 2</button>
+  <button class="tab pull" onclick="showDay('pull2', this)">الخميس — Pull 2</button>
+</div>
+
+<!-- ==================== PUSH 1 ==================== -->
+<div class="day-content push active" id="day-push1">
+  <div class="day-header">
+    <div class="day-header-info">
+      <h2>السبت 🌅</h2>
+      <p>صباحي ١٠ص · حوالي 65 دقيقة</p>
+    </div>
+    <div class="day-header-badge push-badge">PUSH 1</div>
+  </div>
+
+  <div class="section-label">🔥 الصدر</div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">1</div>
+      <div class="ex-info">
+        <div class="ex-name">Bench Press — بنش بريس بالبار</div>
+        <div class="ex-muscle">Chest · الحركة الأساسية</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">4 <span>sets</span></div>
+      <div class="set-box">6-8 <span>reps</span></div>
+      <div class="set-box">راحة <span>90 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 40-50 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=bench+press+form+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ ركّز على الوزن الثقيل هنا - ده تمرين القوة. لو عملت 8 بسهولة زود الوزن.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-bench-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('bench-press', this.value)" />
+      <span class="weight-saved" id="ws-bench-press"></span>
+    </div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">2</div>
+      <div class="ex-info">
+        <div class="ex-name">Incline Dumbbell Press</div>
+        <div class="ex-muscle">Upper Chest · الصدر العلوي</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>75 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 12-15 كيلو لكل إيد</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=incline+dumbbell+press+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ الزاوية 30-45 درجة بس، متعملش 90 - ده بيحوله لتمرين كتف.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-incline-db-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('incline-db-press', this.value)" />
+      <span class="weight-saved" id="ws-incline-db-press"></span>
+    </div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">3</div>
+      <div class="ex-info">
+        <div class="ex-name">Cable Fly / Pec Dec</div>
+        <div class="ex-muscle">Chest · تعريف وعزل</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">12-15 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 10-15 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=cable+fly+chest+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ اعصر الصدر في النهاية واتحس بالـ stretch في البداية.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-cable-fly" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('cable-fly', this.value)" />
+      <span class="weight-saved" id="ws-cable-fly"></span>
+    </div>
+
+  <div class="section-label">💪 الكتف</div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">4</div>
+      <div class="ex-info">
+        <div class="ex-name">Overhead Press — بالدمبل أو البار</div>
+        <div class="ex-muscle">Shoulders · الكتف الأمامي والجانبي</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">4 <span>sets</span></div>
+      <div class="set-box">8-10 <span>reps</span></div>
+      <div class="set-box">راحة <span>90 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 30-40 كيلو (بار) أو 10-12 كيلو (دمبل)</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=overhead+press+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-ohp" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('ohp', this.value)" />
+      <span class="weight-saved" id="ws-ohp"></span>
+    </div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-info">
+        <div class="ex-name">Lateral Raise — رفع جانبي</div>
+        <div class="ex-muscle">Side Deltoid · عرض الكتف</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">15-20 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 5-7 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=lateral+raise+proper+form" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ وزن خفيف وحركة صح أهم من وزن تقيل وهيئة غلط. إيدك تبقى زي ما بتصب كوباية.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-lateral-raise-1" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('lateral-raise-1', this.value)" />
+      <span class="weight-saved" id="ws-lateral-raise-1"></span>
+    </div>
+
+  <div class="section-label">🔙 الترايسبس</div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">6</div>
+      <div class="ex-info">
+        <div class="ex-name">Tricep Pushdown — كيبل</div>
+        <div class="ex-muscle">Triceps · العضلة التلاتية</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">12-15 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 15-20 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=tricep+pushdown+cable+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-tricep-pushdown" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('tricep-pushdown', this.value)" />
+      <span class="weight-saved" id="ws-tricep-pushdown"></span>
+    </div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">7</div>
+      <div class="ex-info">
+        <div class="ex-name">Overhead Tricep Extension</div>
+        <div class="ex-muscle">Triceps Long Head · الرأس الطويل</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">12 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 10-15 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=overhead+tricep+extension+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-overhead-ext" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('overhead-ext', this.value)" />
+      <span class="weight-saved" id="ws-overhead-ext"></span>
+    </div>
+
+  <div class="cardio-box">
+    <h4>🏃 كارديو آخر الجلسة — 15 دقيقة</h4>
+    <div class="cardio-row"><span>الآلة</span><span class="cardio-val">Treadmill أو Bike</span></div>
+    <div class="cardio-row"><span>السرعة (تريدميل)</span><span class="cardio-val">7-8 كم/ساعة</span></div>
+    <div class="cardio-row"><span>الميل</span><span class="cardio-val">4-5%</span></div>
+    <div class="cardio-row"><span>نبضات القلب</span><span class="cardio-val">130-140 نبضة/دقيقة</span></div>
+  </div>
+</div>
+
+<!-- ==================== PULL 1 (Sunday - light) ==================== -->
+<div class="day-content pull" id="day-pull1">
+  <div class="day-header">
+    <div class="day-header-info">
+      <h2>الأحد ⛪</h2>
+      <p>بعد القداس · قبل 12 · 60 دقيقة</p>
+    </div>
+    <div class="day-header-badge pull-badge">PULL 1</div>
+  </div>
+
+  <div class="day-note">
+    ⚠️ الأكل قبله بسيط (موزة أو بروتين بار) — هتلاقي طاقتك أقل شوية وده طبيعي. ركّز على الشكل الصح مش الوزن الأتقل.
+  </div>
+
+  <div class="section-label">🔵 الظهر</div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">1</div>
+      <div class="ex-info">
+        <div class="ex-name">Lat Pulldown — سحب علوي</div>
+        <div class="ex-muscle">Lats · الظهر العريض</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">4 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>75 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 40-50 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=lat+pulldown+proper+form" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ اسحب لحد الصدر مش للوجه، وحس إن الكوع بيروح للأرض.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-lat-pulldown" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('lat-pulldown', this.value)" />
+      <span class="weight-saved" id="ws-lat-pulldown"></span>
+    </div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">2</div>
+      <div class="ex-info">
+        <div class="ex-name">Seated Cable Row — سحب أمامي</div>
+        <div class="ex-muscle">Mid Back · وسط الظهر</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>75 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 40-50 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=seated+cable+row+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ اعصر الكتفين مع بعض في نهاية الحركة واتحس بالظهر.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-seated-row" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('seated-row', this.value)" />
+      <span class="weight-saved" id="ws-seated-row"></span>
+    </div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">3</div>
+      <div class="ex-info">
+        <div class="ex-name">Dumbbell Row — سحب بالدمبل</div>
+        <div class="ex-muscle">Lats + Rhomboids · الظهر كامل</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 15-20 كيلو لكل إيد</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=dumbbell+row+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-db-row" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('db-row', this.value)" />
+      <span class="weight-saved" id="ws-db-row"></span>
+    </div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">4</div>
+      <div class="ex-info">
+        <div class="ex-name">Face Pull — كيبل</div>
+        <div class="ex-muscle">Rear Deltoid · صحة الكتف</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">15 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 10-15 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=face+pull+cable+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ تمرين مهم جداً لصحة الكتف ومنظره من الخلف - متتخطاهوش.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-face-pull" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('face-pull', this.value)" />
+      <span class="weight-saved" id="ws-face-pull"></span>
+    </div>
+
+  <div class="section-label">💙 البايسبس</div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-info">
+        <div class="ex-name">Barbell Curl — كيرل بالبار</div>
+        <div class="ex-muscle">Biceps · العضلة التنائية</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 20-25 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=barbell+curl+proper+form" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-barbell-curl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('barbell-curl', this.value)" />
+      <span class="weight-saved" id="ws-barbell-curl"></span>
+    </div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">6</div>
+      <div class="ex-info">
+        <div class="ex-name">Hammer Curl — هامر كيرل</div>
+        <div class="ex-muscle">Brachialis · سمك الإيد</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">12 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 10-12 كيلو لكل إيد</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=hammer+curl+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ الهامر كيرل بيزود سمك الإيد من الجانب - مهم جداً للشكل العام.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-hammer-curl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('hammer-curl', this.value)" />
+      <span class="weight-saved" id="ws-hammer-curl"></span>
+    </div>
+
+  <div class="cardio-box">
+    <h4>🏃 كارديو — 15 دقيقة خفيف (أكلك قليل النهارده)</h4>
+    <div class="cardio-row"><span>السرعة (تريدميل)</span><span class="cardio-val">5-6 كم/ساعة</span></div>
+    <div class="cardio-row"><span>الميل</span><span class="cardio-val">2-3%</span></div>
+    <div class="cardio-row"><span>نبضات القلب</span><span class="cardio-val">110-120 نبضة/دقيقة</span></div>
+  </div>
+</div>
+
+<!-- ==================== LEGS ==================== -->
+<div class="day-content legs" id="day-legs1">
+  <div class="day-header">
+    <div class="day-header-info">
+      <h2>الاتنين 🦵</h2>
+      <p>صباحي ١٠ص · 65 دقيقة</p>
+    </div>
+    <div class="day-header-badge legs-badge">LEGS + CORE</div>
+  </div>
+
+  <div class="section-label">🦵 الأرجل</div>
+
+  <div class="exercise legs">
+    <div class="ex-header">
+      <div class="ex-num">1</div>
+      <div class="ex-info">
+        <div class="ex-name">Squat — السكوات بالبار</div>
+        <div class="ex-muscle">Quads + Glutes · الفخدين والمؤخرة</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">4 <span>sets</span></div>
+      <div class="set-box">6-8 <span>reps</span></div>
+      <div class="set-box">راحة <span>2 دقيقة</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 50-60 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=squat+proper+form+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ ده أهم تمرين في البرنامج كله. لو مش بتعمله دلوقتي ابدأ بالـ Goblet Squat بدمبل.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-squat" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('squat', this.value)" />
+      <span class="weight-saved" id="ws-squat"></span>
+    </div>
+
+  <div class="exercise legs">
+    <div class="ex-header">
+      <div class="ex-num">2</div>
+      <div class="ex-info">
+        <div class="ex-name">Leg Press — ماكينة الأرجل</div>
+        <div class="ex-muscle">Quads + Hamstrings</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>90 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 80-100 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=leg+press+proper+form" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-leg-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('leg-press', this.value)" />
+      <span class="weight-saved" id="ws-leg-press"></span>
+    </div>
+
+  <div class="exercise legs">
+    <div class="ex-header">
+      <div class="ex-num">3</div>
+      <div class="ex-info">
+        <div class="ex-name">Romanian Deadlift — RDL</div>
+        <div class="ex-muscle">Hamstrings + Glutes · الخلف</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>90 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 40-50 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=romanian+deadlift+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ ظهرك مستقيم دايماً، وحس بالـ stretch في الهامسترينج مش في الظهر.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-rdl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('rdl', this.value)" />
+      <span class="weight-saved" id="ws-rdl"></span>
+    </div>
+
+  <div class="exercise legs">
+    <div class="ex-header">
+      <div class="ex-num">4</div>
+      <div class="ex-info">
+        <div class="ex-name">Leg Extension + Leg Curl</div>
+        <div class="ex-muscle">Isolation · عزل الأرجل</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">12-15 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">🎯 Core</div>
+
+  <div class="exercise legs">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-info">
+        <div class="ex-name">Plank</div>
+        <div class="ex-muscle">Core · الثبات</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">45-60 <span>ثانية</span></div>
+      <div class="set-box">راحة <span>45 ث</span></div>
+    </div>
+  </div>
+
+  <div class="exercise legs">
+    <div class="ex-header">
+      <div class="ex-num">6</div>
+      <div class="ex-info">
+        <div class="ex-name">Cable Crunch أو Hanging Leg Raise</div>
+        <div class="ex-muscle">Abs · البطن</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">15 <span>reps</span></div>
+      <div class="set-box">راحة <span>45 ث</span></div>
+    </div>
+    <div class="ex-tip">⚡ البطن بيظهر بالأكل مش بالتمرين - لكن التمرين بيقوي الـ core وبيساعد الوضعية.</div>
+  </div>
+
+  <div class="cardio-box">
+    <h4>🏃 كارديو — 15 دقيقة</h4>
+    <div class="cardio-row"><span>الآلة</span><span class="cardio-val">Stairmaster أو Bike</span></div>
+    <div class="cardio-row"><span>السرعة (Bike)</span><span class="cardio-val">مستوى 8-10</span></div>
+    <div class="cardio-row"><span>نبضات القلب</span><span class="cardio-val">130-140 نبضة/دقيقة</span></div>
+  </div>
+</div>
+
+<!-- ==================== PUSH 2 ==================== -->
+<div class="day-content push" id="day-push2">
+  <div class="day-header">
+    <div class="day-header-info">
+      <h2>الأربع 🌆</h2>
+      <p>مسائي ٦-٧م · 65 دقيقة</p>
+    </div>
+    <div class="day-header-badge push-badge">PUSH 2</div>
+  </div>
+
+  <div class="section-label">🔥 الصدر — تركيز مختلف</div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">1</div>
+      <div class="ex-info">
+        <div class="ex-name">Dumbbell Flat Press</div>
+        <div class="ex-muscle">Chest · بديل للبنش بار</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">4 <span>sets</span></div>
+      <div class="set-box">8-10 <span>reps</span></div>
+      <div class="set-box">راحة <span>90 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 15-20 كيلو لكل إيد</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=dumbbell+bench+press+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ الدمبل بيدي مدى حركة أكبر من البار وبيشغّل كل جزء في الصدر.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-leg-ext-curl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('leg-ext-curl', this.value)" />
+      <span class="weight-saved" id="ws-leg-ext-curl"></span>
+    </div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">2</div>
+      <div class="ex-info">
+        <div class="ex-name">Incline Barbell Press</div>
+        <div class="ex-muscle">Upper Chest · الصدر العلوي</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10 <span>reps</span></div>
+      <div class="set-box">راحة <span>75 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 35-45 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=incline+barbell+press+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-plank" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('plank', this.value)" />
+      <span class="weight-saved" id="ws-plank"></span>
+    </div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">3</div>
+      <div class="ex-info">
+        <div class="ex-name">Dips — شناق</div>
+        <div class="ex-muscle">Lower Chest + Triceps</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>75 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ وزن جسمك — لو سهل حط حزام</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=dips+chest+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ انحني للأمام شوية عشان تشغّل الصدر أكتر من الترايسبس.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-cable-crunch" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('cable-crunch', this.value)" />
+      <span class="weight-saved" id="ws-cable-crunch"></span>
+    </div>
+
+  <div class="section-label">💪 الكتف</div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">4</div>
+      <div class="ex-info">
+        <div class="ex-name">Arnold Press</div>
+        <div class="ex-muscle">All 3 Deltoid Heads · الكتف كامل</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>75 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 10-12 كيلو لكل إيد</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=arnold+press+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-db-flat-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('db-flat-press', this.value)" />
+      <span class="weight-saved" id="ws-db-flat-press"></span>
+    </div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-info">
+        <div class="ex-name">Lateral Raise — كيبل أو دمبل</div>
+        <div class="ex-muscle">Side Deltoid</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">15-20 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">🔙 الترايسبس</div>
+
+  <div class="exercise push">
+    <div class="ex-header">
+      <div class="ex-num">6</div>
+      <div class="ex-info">
+        <div class="ex-name">Skull Crusher — بالبار أو EZ Bar</div>
+        <div class="ex-muscle">Triceps · كل الرؤوس</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 20-25 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=skull+crusher+EZ+bar+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-incline-bar-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('incline-bar-press', this.value)" />
+      <span class="weight-saved" id="ws-incline-bar-press"></span>
+    </div>
+
+  <div class="cardio-box">
+    <h4>🏃 كارديو — 15 دقيقة</h4>
+    <div class="cardio-row"><span>الآلة</span><span class="cardio-val">Treadmill incline أو Bike</span></div>
+    <div class="cardio-row"><span>السرعة (تريدميل)</span><span class="cardio-val">7-8 كم/ساعة</span></div>
+    <div class="cardio-row"><span>الميل</span><span class="cardio-val">4-5%</span></div>
+    <div class="cardio-row"><span>نبضات القلب</span><span class="cardio-val">130-140 نبضة/دقيقة</span></div>
+  </div>
+</div>
+
+<!-- ==================== PULL 2 ==================== -->
+<div class="day-content pull" id="day-pull2">
+  <div class="day-header">
+    <div class="day-header-info">
+      <h2>الخميس 🌆</h2>
+      <p>مسائي ٦-٧م · 65 دقيقة</p>
+    </div>
+    <div class="day-header-badge pull-badge">PULL 2 + CORE</div>
+  </div>
+
+  <div class="section-label">🔵 الظهر — تركيز مختلف</div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">1</div>
+      <div class="ex-info">
+        <div class="ex-name">Deadlift — ديدليفت</div>
+        <div class="ex-muscle">Full Back · الظهر كامل + الأرجل</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">4 <span>sets</span></div>
+      <div class="set-box">5-6 <span>reps</span></div>
+      <div class="set-box">راحة <span>2 دقيقة</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 50-60 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=deadlift+proper+form+beginner" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ لو لسه مش بتعمله ابدأ بوزن خفيف وتعلم الشكل الصح أول - أهم تمرين للجسم كله.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-dips" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('dips', this.value)" />
+      <span class="weight-saved" id="ws-dips"></span>
+    </div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">2</div>
+      <div class="ex-info">
+        <div class="ex-name">Pull Up / Assisted Pull Up — عقلة</div>
+        <div class="ex-muscle">Lats · الظهر العريض</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">max reps</div>
+      <div class="set-box">راحة <span>90 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ وزن جسمك — أو ماكينة مساعدة</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=pull+up+tutorial+beginners" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ لو مش قادر تعمل عقلة كاملة استخدم الماكينة المساعدة أو البنج.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-arnold-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('arnold-press', this.value)" />
+      <span class="weight-saved" id="ws-arnold-press"></span>
+    </div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">3</div>
+      <div class="ex-info">
+        <div class="ex-name">T-Bar Row أو Chest Supported Row</div>
+        <div class="ex-muscle">Mid Back + Thickness · سمك الظهر</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10 <span>reps</span></div>
+      <div class="set-box">راحة <span>75 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 30-40 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=t-bar+row+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-lateral-raise-2" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('lateral-raise-2', this.value)" />
+      <span class="weight-saved" id="ws-lateral-raise-2"></span>
+    </div>
+
+  <div class="section-label">💙 البايسبس</div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">4</div>
+      <div class="ex-info">
+        <div class="ex-name">Incline Dumbbell Curl</div>
+        <div class="ex-muscle">Biceps Long Head · قمة البايسبس</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-12 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 8-10 كيلو لكل إيد</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=incline+dumbbell+curl+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ الـ stretch في الأسفل هو السر - معملهوش بسرعة.</div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-skull-crusher" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('skull-crusher', this.value)" />
+      <span class="weight-saved" id="ws-skull-crusher"></span>
+    </div>
+
+  <div class="exercise pull">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-info">
+        <div class="ex-name">Cable Curl — كيبل</div>
+        <div class="ex-muscle">Biceps · ضخ دم وإنهاء</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">15 <span>reps</span></div>
+      <div class="set-box">راحة <span>45 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 10-15 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=cable+curl+bicep+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+  </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-deadlift" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('deadlift', this.value)" />
+      <span class="weight-saved" id="ws-deadlift"></span>
+    </div>
+
+  <div class="section-label">🎯 Core</div>
+
+  <div class="exercise legs">
+    <div class="ex-header">
+      <div class="ex-num">6</div>
+      <div class="ex-info">
+        <div class="ex-name">Ab Wheel أو Plank Variations</div>
+        <div class="ex-muscle">Core · البطن والثبات</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">10-15 <span>reps</span></div>
+      <div class="set-box">راحة <span>45 ث</span></div>
+    </div>
+    <div class="weight-log"><input type="number" class="weight-input" id="w-ab-wheel" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('ab-wheel', this.value)" /><span class="weight-saved" id="ws-ab-wheel"></span></div>
+  </div>
+
+  <div class="cardio-box">
+    <h4>🏃 كارديو — 15 دقيقة</h4>
+    <div class="cardio-row"><span>الآلة</span><span class="cardio-val">Rowing Machine أو Bike</span></div>
+    <div class="cardio-row"><span>الشدة (Rowing)</span><span class="cardio-val">مستوى 6-8</span></div>
+    <div class="cardio-row"><span>نبضات القلب</span><span class="cardio-val">135-145 نبضة/دقيقة</span></div>
+  </div>
+</div>
+
+<!-- REST TIMES -->
+<div class="rest-guide">
+  <h4>⏱️ أوقات الراحة بين السيتات</h4>
+  <div class="rest-row"><span>تمارين قوة (5-8 reps)</span><span class="rest-time">90 ث - 2 دقيقة</span></div>
+  <div class="rest-row"><span>تمارين حجم (10-12 reps)</span><span class="rest-time">60 - 75 ثانية</span></div>
+  <div class="rest-row"><span>تمارين عزل (15+ reps)</span><span class="rest-time">45 - 60 ثانية</span></div>
+</div>
+
+<!-- TIPS -->
+<div class="tips-box">
+  <h3>⚡ قواعد البرنامج</h3>
+  <div class="tip-item">📈 <span>Progressive Overload: كل أسبوع حاول تزود إما تقيل أكتر أو rep أكتر. ده السر الوحيد للنمو.</span></div>
+  <div class="tip-item">📝 <span>سجّل تمرينك كل جلسة — الوزن والرابس - عشان تعرف إنت بتتقدم ولا لا.</span></div>
+  <div class="tip-item">😴 <span>النوم 7-8 ساعات مش رفاهية - العضل بيتبني وانت نايم مش في الجيم.</span></div>
+  <div class="tip-item">🚫 <span>الكارديو 15 دقيقة بس في الآخر - مش أكتر عشان متحرقش العضل اللي اشتغلت عليه.</span></div>
+  <div class="tip-item">🔁 <span>اتمسك بالبرنامج ده 3 شهور على الأقل قبل ما تفكر تغيره - الاستمرارية هي اللي بتعمل الفرق.</span></div>
+</div>
+
+
+
+</div>
+
+<!-- ===== DIET PAGE ===== -->
+<div class="page" id="page-diet">
+  <br>
+
+
+
+
+<div class="macros-row">
+  <div class="macro-box c1"><span class="val">~2,700</span><span class="lbl">سعر</span></div>
+  <div class="macro-box c2"><span class="val">~190g</span><span class="lbl">بروتين</span></div>
+  <div class="macro-box c3"><span class="val">~300g</span><span class="lbl">كارب</span></div>
+  <div class="macro-box c4"><span class="val">~70g</span><span class="lbl">دهون</span></div>
+</div>
+
+<!-- ALTERNATIVES -->
+<div class="alts-section">
+  <h3>🔄 البدايل الجديدة اللي بنستخدمها</h3>
+  <div class="alt-row">
+    <span class="alt-old">صدور فراخ بس</span>
+    <span class="alt-arrow">→</span>
+    <span class="alt-new">فخدة فراخ / تونة / بيض / لحمة مفرومة</span>
+    <span class="alt-why">تنوع بروتين بسعر كويس</span>
+  </div>
+  <div class="alt-row">
+    <span class="alt-old">رز أبيض بس</span>
+    <span class="alt-arrow">→</span>
+    <span class="alt-new">بطاطس / معكرونة / خبز بلدي / رز بني</span>
+    <span class="alt-why">كارب متنوع</span>
+  </div>
+  <div class="alt-row">
+    <span class="alt-old">شوفان بالحليب بس</span>
+    <span class="alt-arrow">→</span>
+    <span class="alt-new">فول / فطير / كورن فليكس بالحليب</span>
+    <span class="alt-why">فطار مختلف كل يوم</span>
+  </div>
+  <div class="alt-row">
+    <span class="alt-old">قريش لوحده</span>
+    <span class="alt-arrow">→</span>
+    <span class="alt-new">سموذي قريش + فراولة + لبن بس</span>
+    <span class="alt-why">بتشربه مش بتاكله</span>
+  </div>
+  <div class="alt-row">
+    <span class="alt-old">فراولة بس</span>
+    <span class="alt-arrow">→</span>
+    <span class="alt-new">موز / تفاح / برتقال / مانجو</span>
+    <span class="alt-why">فواكه رخيصة ومتاحة</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="diet-tab active" onclick="showDiet('a', this)">يوم A 🌅</button>
+  <button class="diet-tab" onclick="showDiet('b', this)">يوم B 💪</button>
+  <button class="diet-tab" onclick="showDiet('c', this)">يوم C 🍝</button>
+  <button class="diet-tab" onclick="showDiet('d', this)">يوم D 🥚</button>
+  <button class="diet-tab" onclick="showDiet('e', this)">يوم E 🐟</button>
+</div>
+
+<!-- DAY A: فول + فخدة + بطاطس -->
+<div class="diet-day active" id="diet-a">
+  <div class="diet-day-label">🏋️ تمرين صباحي — فول وفخدة وبطاطس</div>
+
+  <div class="meal m1">
+    <div class="meal-top"><span class="meal-name">🌅 فطار — فول</span><span class="meal-time">8:30 ص</span></div>
+    <div class="meal-cals">~500 سعر · 28g بروتين</div>
+    <div class="items">
+      <div class="item"><span>فول مدمس</span><span class="item-amt">400g</span></div>
+      <div class="item"><span>بيض مسلوق</span><span class="item-amt">2 بيضات</span></div>
+      <div class="item"><span>خبز بلدي</span><span class="item-amt">2 رغيف</span></div>
+    </div>
+    <div class="tip">💡 الفول بالكمون والليمون والثوم - وجبة فطار مصرية كلاسيك وبروتين عالي بسعر بسيط</div>
+  </div>
+
+  <div class="meal m2">
+    <div class="meal-top"><span class="meal-name">💪 بعد التمرين — فخدة وبطاطس</span><span class="meal-time">12:00 م</span></div>
+    <div class="meal-cals">~850 سعر · 60g بروتين</div>
+    <div class="items">
+      <div class="item"><span>فخدة فراخ (بدون جلد)</span><span class="item-amt">500g</span></div>
+      <div class="item"><span>بطاطس مسلوقة أو مشوية</span><span class="item-amt">300g</span></div>
+    </div>
+    <div class="tip">💡 الفخدة أرخص من الصدر وطعمها أحسن - اشويها في الفرن بزيت وبهارات</div>
+  </div>
+
+  <div class="meal m3">
+    <div class="meal-top"><span class="meal-name">🥤 سموذي</span><span class="meal-time">4:00 م</span></div>
+    <div class="meal-cals">~310 سعر · 28g بروتين</div>
+    <div class="items">
+      <div class="item"><span>قريش</span><span class="item-amt">200g</span></div>
+      <div class="item"><span>لبن كامل</span><span class="item-amt">200ml</span></div>
+      <div class="item"><span>موز</span><span class="item-amt">1 حبة</span></div>
+    </div>
+    <div class="tip">💡 الموز بدل الفراولة بيدي حلاوة طبيعية وكارب كويس</div>
+  </div>
+
+  <div class="meal m4">
+    <div class="meal-top"><span class="meal-name">🌙 عشا — صدور فراخ ورز</span><span class="meal-time">8:00 م</span></div>
+    <div class="meal-cals">~840 سعر · 65g بروتين</div>
+    <div class="items">
+      <div class="item"><span>صدور فراخ مشوية</span><span class="item-amt">500g</span></div>
+      <div class="item"><span>رز أبيض</span><span class="item-amt">250g</span></div>
+    </div>
+  </div>
+
+  <div class="day-footer">
+    <span class="day-footer-lbl">إجمالي اليوم</span>
+    <span class="day-footer-val">~2,500 سعر</span>
+  </div>
+  <div class="water">💧 3 لتر مياه — يوم تمرين</div>
+</div>
+
+<!-- DAY B: شوفان + تونة + معكرونة -->
+<div class="diet-day" id="diet-b">
+  <div class="diet-day-label">🏋️ تمرين مسائي — شوفان وتونة ومعكرونة</div>
+
+  <div class="meal m1">
+    <div class="meal-top"><span class="meal-name">🌅 فطار — شوفان بالموز</span><span class="meal-time">9:00 ص</span></div>
+    <div class="meal-cals">~550 سعر · 25g بروتين</div>
+    <div class="items">
+      <div class="item"><span>شوفان</span><span class="item-amt">60g</span></div>
+      <div class="item"><span>لبن كامل</span><span class="item-amt">300ml</span></div>
+      <div class="item"><span>موز</span><span class="item-amt">1 حبة</span></div>
+      <div class="item"><span>بيض مسلوق</span><span class="item-amt">2 بيضات</span></div>
+    </div>
+  </div>
+
+  <div class="meal m2">
+    <div class="meal-top"><span class="meal-name">⚡ غدا قبل التمرين — تونة ومعكرونة</span><span class="meal-time">3:00 م</span></div>
+    <div class="meal-cals">~750 سعر · 55g بروتين</div>
+    <div class="items">
+      <div class="item"><span>تونة في الماء</span><span class="item-amt">3 علب (240g)</span></div>
+      <div class="item"><span>معكرونة مسلوقة</span><span class="item-amt">250g</span></div>
+      <div class="item"><span>زيت زيتون</span><span class="item-amt">1 ملعقة كبيرة</span></div>
+    </div>
+    <div class="tip">💡 تونة بالمعكرونة والليمون والبقدونس - بسيطة وسريعة وبروتين عالي</div>
+  </div>
+
+  <div class="meal m3">
+    <div class="meal-top"><span class="meal-name">🥤 سموذي</span><span class="meal-time">5:30 م</span></div>
+    <div class="meal-cals">~310 سعر · 28g بروتين</div>
+    <div class="items">
+      <div class="item"><span>قريش</span><span class="item-amt">200g</span></div>
+      <div class="item"><span>لبن كامل</span><span class="item-amt">200ml</span></div>
+      <div class="item"><span>فراولة</span><span class="item-amt">150g</span></div>
+    </div>
+  </div>
+
+  <div class="meal m4">
+    <div class="meal-top"><span class="meal-name">💪 بعد التمرين — فراخ ورز</span><span class="meal-time">8:30 م</span></div>
+    <div class="meal-cals">~840 سعر · 65g بروتين</div>
+    <div class="items">
+      <div class="item"><span>صدور فراخ بالبابريكا</span><span class="item-amt">500g</span></div>
+      <div class="item"><span>رز</span><span class="item-amt">250g</span></div>
+    </div>
+  </div>
+
+  <div class="day-footer">
+    <span class="day-footer-lbl">إجمالي اليوم</span>
+    <span class="day-footer-val">~2,450 سعر</span>
+  </div>
+  <div class="water">💧 3 لتر مياه — يوم تمرين</div>
+</div>
+
+<!-- DAY C: كورن فليكس + لحمة + معكرونة -->
+<div class="diet-day" id="diet-c">
+  <div class="diet-day-label">😴 يوم راحة — كورن فليكس ولحمة ومعكرونة</div>
+
+  <div class="meal m1">
+    <div class="meal-top"><span class="meal-name">🌅 فطار — كورن فليكس</span><span class="meal-time">9:30 ص</span></div>
+    <div class="meal-cals">~480 سعر · 20g بروتين</div>
+    <div class="items">
+      <div class="item"><span>كورن فليكس (unsweetened)</span><span class="item-amt">80g</span></div>
+      <div class="item"><span>لبن كامل</span><span class="item-amt">300ml</span></div>
+      <div class="item"><span>بيض مسلوق</span><span class="item-amt">2 بيضات</span></div>
+    </div>
+    <div class="tip">💡 كورن فليكس بالحليب الكامل وجبة فطار سريعة ومرضية - جرب تحط فاكهة فوقيه</div>
+  </div>
+
+  <div class="meal m2">
+    <div class="meal-top"><span class="meal-name">☀️ غدا — لحمة مفرومة ومعكرونة</span><span class="meal-time">2:00 م</span></div>
+    <div class="meal-cals">~900 سعر · 65g بروتين</div>
+    <div class="items">
+      <div class="item"><span>لحمة مفرومة (lean)</span><span class="item-amt">300g</span></div>
+      <div class="item"><span>معكرونة مسلوقة</span><span class="item-amt">250g</span></div>
+      <div class="item"><span>صلصة طماطم بسيطة</span><span class="item-amt">—</span></div>
+    </div>
+    <div class="tip">💡 بولونيز بسيط - بصل + طماطم + اللحمة. بروتين عالي وطعم مختلف خالص</div>
+  </div>
+
+  <div class="meal m3">
+    <div class="meal-top"><span class="meal-name">🥤 سموذي</span><span class="meal-time">5:00 م</span></div>
+    <div class="meal-cals">~310 سعر · 28g بروتين</div>
+    <div class="items">
+      <div class="item"><span>قريش</span><span class="item-amt">200g</span></div>
+      <div class="item"><span>لبن كامل</span><span class="item-amt">200ml</span></div>
+      <div class="item"><span>تفاح أو مانجو</span><span class="item-amt">1 حبة</span></div>
+    </div>
+  </div>
+
+  <div class="meal m4">
+    <div class="meal-top"><span class="meal-name">🌙 عشا — فراخ وبطاطس</span><span class="meal-time">8:00 م</span></div>
+    <div class="meal-cals">~750 سعر · 60g بروتين</div>
+    <div class="items">
+      <div class="item"><span>صدور فراخ بالكاري</span><span class="item-amt">400g</span></div>
+      <div class="item"><span>بطاطس في الفرن</span><span class="item-amt">300g</span></div>
+    </div>
+  </div>
+
+  <div class="day-footer">
+    <span class="day-footer-lbl">إجمالي اليوم</span>
+    <span class="day-footer-val">~2,440 سعر</span>
+  </div>
+  <div class="water">💧 2.5 لتر — يوم راحة</div>
+</div>
+
+<!-- DAY D: فطير + فخدة + رز بني -->
+<div class="diet-day" id="diet-d">
+  <div class="diet-day-label">🔄 تنوع — فطير وفخدة ورز بني</div>
+
+  <div class="meal m1">
+    <div class="meal-top"><span class="meal-name">🌅 فطار — فطير بالبيض</span><span class="meal-time">9:00 ص</span></div>
+    <div class="meal-cals">~580 سعر · 30g بروتين</div>
+    <div class="items">
+      <div class="item"><span>فطير مشلتت (1 طبقة رفيعة)</span><span class="item-amt">100g</span></div>
+      <div class="item"><span>بيض مقلي</span><span class="item-amt">3 بيضات</span></div>
+      <div class="item"><span>لبن كامل</span><span class="item-amt">200ml</span></div>
+    </div>
+    <div class="tip">💡 فطير بيض من البيت أو من المحل - وجبة مختلفة ومشبعة</div>
+  </div>
+
+  <div class="meal m2">
+    <div class="meal-top"><span class="meal-name">☀️ غدا — فخدة ورز بني</span><span class="meal-time">1:30 م</span></div>
+    <div class="meal-cals">~820 سعر · 62g بروتين</div>
+    <div class="items">
+      <div class="item"><span>فخدة فراخ مشوية</span><span class="item-amt">500g</span></div>
+      <div class="item"><span>رز بني</span><span class="item-amt">250g</span></div>
+    </div>
+    <div class="tip">💡 الرز البني أغنى بالألياف والمعادن - بيشبع أكتر</div>
+  </div>
+
+  <div class="meal m3">
+    <div class="meal-top"><span class="meal-name">🥤 سموذي</span><span class="meal-time">4:30 م</span></div>
+    <div class="meal-cals">~350 سعر · 30g بروتين</div>
+    <div class="items">
+      <div class="item"><span>قريش</span><span class="item-amt">200g</span></div>
+      <div class="item"><span>لبن كامل</span><span class="item-amt">200ml</span></div>
+      <div class="item"><span>موز + فراولة</span><span class="item-amt">1 موزة + 100g</span></div>
+    </div>
+  </div>
+
+  <div class="meal m4">
+    <div class="meal-top"><span class="meal-name">🌙 عشا — تونة وخبز</span><span class="meal-time">8:00 م</span></div>
+    <div class="meal-cals">~550 سعر · 45g بروتين</div>
+    <div class="items">
+      <div class="item"><span>تونة في الماء</span><span class="item-amt">3 علب (240g)</span></div>
+      <div class="item"><span>خبز بلدي</span><span class="item-amt">3 أرغفة</span></div>
+      <div class="item"><span>طماطم وخيار</span><span class="item-amt">—</span></div>
+    </div>
+    <div class="tip">💡 ساندوتش تونة بسيط - سريع وبروتين عالي وخفيف على المعدة بالليل</div>
+  </div>
+
+  <div class="day-footer">
+    <span class="day-footer-lbl">إجمالي اليوم</span>
+    <span class="day-footer-val">~2,300 سعر</span>
+  </div>
+  <div class="water">💧 2.5 لتر مياه</div>
+</div>
+
+<!-- DAY E: بيض كامل + سمك + بطاطس -->
+<div class="diet-day" id="diet-e">
+  <div class="diet-day-label">🐟 يوم متنوع — بيض وسمك وبطاطس</div>
+
+  <div class="meal m1">
+    <div class="meal-top"><span class="meal-name">🌅 فطار — عجة كبيرة</span><span class="meal-time">9:00 ص</span></div>
+    <div class="meal-cals">~500 سعر · 28g بروتين</div>
+    <div class="items">
+      <div class="item"><span>بيض</span><span class="item-amt">4 بيضات</span></div>
+      <div class="item"><span>شوفان بالماء</span><span class="item-amt">60g</span></div>
+      <div class="item"><span>لبن كامل جانب</span><span class="item-amt">200ml</span></div>
+    </div>
+    <div class="tip">💡 عجة بالطماطم والفلفل والكزبرة - طعم مختلف خالص عن البيض المسلوق</div>
+  </div>
+
+  <div class="meal m2">
+    <div class="meal-top"><span class="meal-name">☀️ غدا — سمك وبطاطس</span><span class="meal-time">2:00 م</span></div>
+    <div class="meal-cals">~750 سعر · 60g بروتين</div>
+    <div class="items">
+      <div class="item"><span>فيليه سمك (بلطي / مكريل)</span><span class="item-amt">400g</span></div>
+      <div class="item"><span>بطاطس في الفرن</span><span class="item-amt">350g</span></div>
+    </div>
+    <div class="tip">💡 السمك المشوي بالليمون والثوم سريع جداً ومفيد جداً - أوميجا 3 طبيعي</div>
+  </div>
+
+  <div class="meal m3">
+    <div class="meal-top"><span class="meal-name">🥤 سموذي</span><span class="meal-time">5:00 م</span></div>
+    <div class="meal-cals">~310 سعر · 28g بروتين</div>
+    <div class="items">
+      <div class="item"><span>قريش</span><span class="item-amt">200g</span></div>
+      <div class="item"><span>لبن كامل</span><span class="item-amt">200ml</span></div>
+      <div class="item"><span>مانجو أو برتقال</span><span class="item-amt">1 حبة</span></div>
+    </div>
+  </div>
+
+  <div class="meal m4">
+    <div class="meal-top"><span class="meal-name">🌙 عشا — فراخ ورز</span><span class="meal-time">8:30 م</span></div>
+    <div class="meal-cals">~840 سعر · 65g بروتين</div>
+    <div class="items">
+      <div class="item"><span>صدور فراخ بالثوم والليمون</span><span class="item-amt">500g</span></div>
+      <div class="item"><span>رز أبيض</span><span class="item-amt">250g</span></div>
+    </div>
+  </div>
+
+  <div class="day-footer">
+    <span class="day-footer-lbl">إجمالي اليوم</span>
+    <span class="day-footer-val">~2,400 سعر</span>
+  </div>
+  <div class="water">💧 2.5 لتر مياه</div>
+</div>
+
+<!-- TIPS -->
+<div class="tips-box">
+  <h3>⚡ كيف تستخدم الجدول</h3>
+  <div class="tip-row">🔄 <span>دوّر بين الأيام الخمسة كيفك، مفيش ترتيب إجباري.</span></div>
+  <div class="tip-row">🧂 <span>البهارات هي السر - كمون، كاري، بابريكا، ثوم، ليمون بيغيروا الأكل خالص.</span></div>
+  <div class="tip-row">📦 <span>اطبخ الفراخ أو اللحمة ليومين مرة واحدة عشان توفر وقت.</span></div>
+  <div class="tip-row">🥤 <span>السموذي بالقريش ثابت كل يوم - بس غير الفاكهة عشان التنوع.</span></div>
+  <div class="tip-row">💧 <span>المياه مش اختياري - ارفع لـ 2.5-3 لتر يومياً.</span></div>
+</div>
+
+
+
+</div>
+
+<script>
+
+// ---- WEIGHT LOGGER ----
+function saveWeight(id, val) {
+  if (val) {
+    localStorage.setItem('w_' + id, val);
+    const el = document.getElementById('ws-' + id);
+    if (el) { el.textContent = '✓ اتحفظ'; setTimeout(() => el.textContent = '', 1500); }
+  }
+}
+
+function loadWeights() {
+  const inputs = document.querySelectorAll('.weight-input');
+  inputs.forEach(input => {
+    const id = input.id.replace('w-', '');
+    const saved = localStorage.getItem('w_' + id);
+    if (saved) {
+      input.value = saved;
+      input.placeholder = saved + ' كيلو';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadWeights);
+
+// ---- PAGE SWITCHER ----
+function switchPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  document.getElementById('nav-workout').className = 'nav-btn' + (p==='workout' ? ' active-workout' : '');
+  document.getElementById('nav-diet').className = 'nav-btn' + (p==='diet' ? ' active-diet' : '');
+  window.scrollTo(0,0);
+}
+
+// ---- WORKOUT TABS ----
+function showDay(id, btn) {
+  document.querySelectorAll('.day-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('#page-workout .tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('day-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ---- DIET TABS ----
+function showDiet(d, btn) {
+  document.querySelectorAll('.diet-day').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.diet-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('diet-' + d).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+</script>
+</body>
+</html>
