@@ -77,6 +77,37 @@
   .page { display: none; padding: 20px 14px 20px; }
   .page.active { display: block; }
 
+
+  /* ===== WEIGHT LOG ===== */
+  .weight-log {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .weight-input {
+    flex: 1;
+    background: #0d0d0d;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    color: #f0f0f0;
+    outline: none;
+    direction: rtl;
+    transition: border-color 0.2s;
+  }
+  .weight-input:focus { border-color: #f0a500; }
+  .weight-input::placeholder { color: #444; font-size: 0.75rem; }
+  .weight-saved {
+    font-size: 0.72rem;
+    color: #22c55e;
+    font-weight: 700;
+    white-space: nowrap;
+    min-width: 60px;
+  }
+
   /* ===== WORKOUT CSS ===== */
 
   :root {
@@ -653,6 +684,10 @@
     </div>
     <div class="ex-tip">⚡ ركّز على الوزن الثقيل هنا - ده تمرين القوة. لو عملت 8 بسهولة زود الوزن.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-bench-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('bench-press', this.value)" />
+      <span class="weight-saved" id="ws-bench-press"></span>
+    </div>
 
   <div class="exercise push">
     <div class="ex-header">
@@ -673,6 +708,10 @@
     </div>
     <div class="ex-tip">⚡ الزاوية 30-45 درجة بس، متعملش 90 - ده بيحوله لتمرين كتف.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-incline-db-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('incline-db-press', this.value)" />
+      <span class="weight-saved" id="ws-incline-db-press"></span>
+    </div>
 
   <div class="exercise push">
     <div class="ex-header">
@@ -693,6 +732,10 @@
     </div>
     <div class="ex-tip">⚡ اعصر الصدر في النهاية واتحس بالـ stretch في البداية.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-cable-fly" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('cable-fly', this.value)" />
+      <span class="weight-saved" id="ws-cable-fly"></span>
+    </div>
 
   <div class="section-label">💪 الكتف</div>
 
@@ -714,6 +757,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=overhead+press+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-ohp" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('ohp', this.value)" />
+      <span class="weight-saved" id="ws-ohp"></span>
+    </div>
 
   <div class="exercise push">
     <div class="ex-header">
@@ -734,6 +781,10 @@
     </div>
     <div class="ex-tip">⚡ وزن خفيف وحركة صح أهم من وزن تقيل وهيئة غلط. إيدك تبقى زي ما بتصب كوباية.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-lateral-raise-1" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('lateral-raise-1', this.value)" />
+      <span class="weight-saved" id="ws-lateral-raise-1"></span>
+    </div>
 
   <div class="section-label">🔙 الترايسبس</div>
 
@@ -755,6 +806,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=tricep+pushdown+cable+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-tricep-pushdown" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('tricep-pushdown', this.value)" />
+      <span class="weight-saved" id="ws-tricep-pushdown"></span>
+    </div>
 
   <div class="exercise push">
     <div class="ex-header">
@@ -774,6 +829,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=overhead+tricep+extension+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-overhead-ext" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('overhead-ext', this.value)" />
+      <span class="weight-saved" id="ws-overhead-ext"></span>
+    </div>
 
   <div class="cardio-box">
     <h4>🏃 كارديو آخر الجلسة — 15 دقيقة</h4>
@@ -819,6 +878,10 @@
     </div>
     <div class="ex-tip">⚡ اسحب لحد الصدر مش للوجه، وحس إن الكوع بيروح للأرض.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-lat-pulldown" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('lat-pulldown', this.value)" />
+      <span class="weight-saved" id="ws-lat-pulldown"></span>
+    </div>
 
   <div class="exercise pull">
     <div class="ex-header">
@@ -839,6 +902,10 @@
     </div>
     <div class="ex-tip">⚡ اعصر الكتفين مع بعض في نهاية الحركة واتحس بالظهر.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-seated-row" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('seated-row', this.value)" />
+      <span class="weight-saved" id="ws-seated-row"></span>
+    </div>
 
   <div class="exercise pull">
     <div class="ex-header">
@@ -858,6 +925,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=dumbbell+row+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-db-row" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('db-row', this.value)" />
+      <span class="weight-saved" id="ws-db-row"></span>
+    </div>
 
   <div class="exercise pull">
     <div class="ex-header">
@@ -878,6 +949,10 @@
     </div>
     <div class="ex-tip">⚡ تمرين مهم جداً لصحة الكتف ومنظره من الخلف - متتخطاهوش.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-face-pull" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('face-pull', this.value)" />
+      <span class="weight-saved" id="ws-face-pull"></span>
+    </div>
 
   <div class="section-label">💙 البايسبس</div>
 
@@ -899,6 +974,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=barbell+curl+proper+form" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-barbell-curl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('barbell-curl', this.value)" />
+      <span class="weight-saved" id="ws-barbell-curl"></span>
+    </div>
 
   <div class="exercise pull">
     <div class="ex-header">
@@ -919,6 +998,10 @@
     </div>
     <div class="ex-tip">⚡ الهامر كيرل بيزود سمك الإيد من الجانب - مهم جداً للشكل العام.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-hammer-curl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('hammer-curl', this.value)" />
+      <span class="weight-saved" id="ws-hammer-curl"></span>
+    </div>
 
   <div class="cardio-box">
     <h4>🏃 كارديو — 15 دقيقة خفيف (أكلك قليل النهارده)</h4>
@@ -959,6 +1042,10 @@
     </div>
     <div class="ex-tip">⚡ ده أهم تمرين في البرنامج كله. لو مش بتعمله دلوقتي ابدأ بالـ Goblet Squat بدمبل.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-squat" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('squat', this.value)" />
+      <span class="weight-saved" id="ws-squat"></span>
+    </div>
 
   <div class="exercise legs">
     <div class="ex-header">
@@ -978,6 +1065,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=leg+press+proper+form" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-leg-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('leg-press', this.value)" />
+      <span class="weight-saved" id="ws-leg-press"></span>
+    </div>
 
   <div class="exercise legs">
     <div class="ex-header">
@@ -998,6 +1089,10 @@
     </div>
     <div class="ex-tip">⚡ ظهرك مستقيم دايماً، وحس بالـ stretch في الهامسترينج مش في الظهر.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-rdl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('rdl', this.value)" />
+      <span class="weight-saved" id="ws-rdl"></span>
+    </div>
 
   <div class="exercise legs">
     <div class="ex-header">
@@ -1086,6 +1181,10 @@
     </div>
     <div class="ex-tip">⚡ الدمبل بيدي مدى حركة أكبر من البار وبيشغّل كل جزء في الصدر.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-leg-ext-curl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('leg-ext-curl', this.value)" />
+      <span class="weight-saved" id="ws-leg-ext-curl"></span>
+    </div>
 
   <div class="exercise push">
     <div class="ex-header">
@@ -1105,6 +1204,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=incline+barbell+press+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-plank" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('plank', this.value)" />
+      <span class="weight-saved" id="ws-plank"></span>
+    </div>
 
   <div class="exercise push">
     <div class="ex-header">
@@ -1125,6 +1228,10 @@
     </div>
     <div class="ex-tip">⚡ انحني للأمام شوية عشان تشغّل الصدر أكتر من الترايسبس.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-cable-crunch" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('cable-crunch', this.value)" />
+      <span class="weight-saved" id="ws-cable-crunch"></span>
+    </div>
 
   <div class="section-label">💪 الكتف</div>
 
@@ -1146,6 +1253,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=arnold+press+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-db-flat-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('db-flat-press', this.value)" />
+      <span class="weight-saved" id="ws-db-flat-press"></span>
+    </div>
 
   <div class="exercise push">
     <div class="ex-header">
@@ -1182,6 +1293,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=skull+crusher+EZ+bar+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-incline-bar-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('incline-bar-press', this.value)" />
+      <span class="weight-saved" id="ws-incline-bar-press"></span>
+    </div>
 
   <div class="cardio-box">
     <h4>🏃 كارديو — 15 دقيقة</h4>
@@ -1223,6 +1338,10 @@
     </div>
     <div class="ex-tip">⚡ لو لسه مش بتعمله ابدأ بوزن خفيف وتعلم الشكل الصح أول - أهم تمرين للجسم كله.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-dips" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('dips', this.value)" />
+      <span class="weight-saved" id="ws-dips"></span>
+    </div>
 
   <div class="exercise pull">
     <div class="ex-header">
@@ -1243,6 +1362,10 @@
     </div>
     <div class="ex-tip">⚡ لو مش قادر تعمل عقلة كاملة استخدم الماكينة المساعدة أو البنج.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-arnold-press" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('arnold-press', this.value)" />
+      <span class="weight-saved" id="ws-arnold-press"></span>
+    </div>
 
   <div class="exercise pull">
     <div class="ex-header">
@@ -1262,6 +1385,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=t-bar+row+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-lateral-raise-2" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('lateral-raise-2', this.value)" />
+      <span class="weight-saved" id="ws-lateral-raise-2"></span>
+    </div>
 
   <div class="section-label">💙 البايسبس</div>
 
@@ -1284,6 +1411,10 @@
     </div>
     <div class="ex-tip">⚡ الـ stretch في الأسفل هو السر - معملهوش بسرعة.</div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-skull-crusher" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('skull-crusher', this.value)" />
+      <span class="weight-saved" id="ws-skull-crusher"></span>
+    </div>
 
   <div class="exercise pull">
     <div class="ex-header">
@@ -1303,6 +1434,10 @@
       <a class="yt-link" href="https://www.youtube.com/results?search_query=cable+curl+bicep+tutorial" target="_blank">▶ YouTube</a>
     </div>
   </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-deadlift" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('deadlift', this.value)" />
+      <span class="weight-saved" id="ws-deadlift"></span>
+    </div>
 
   <div class="section-label">🎯 Core</div>
 
@@ -1319,6 +1454,7 @@
       <div class="set-box">10-15 <span>reps</span></div>
       <div class="set-box">راحة <span>45 ث</span></div>
     </div>
+    <div class="weight-log"><input type="number" class="weight-input" id="w-ab-wheel" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('ab-wheel', this.value)" /><span class="weight-saved" id="ws-ab-wheel"></span></div>
   </div>
 
   <div class="cardio-box">
@@ -1684,6 +1820,30 @@
 </div>
 
 <script>
+
+// ---- WEIGHT LOGGER ----
+function saveWeight(id, val) {
+  if (val) {
+    localStorage.setItem('w_' + id, val);
+    const el = document.getElementById('ws-' + id);
+    if (el) { el.textContent = '✓ اتحفظ'; setTimeout(() => el.textContent = '', 1500); }
+  }
+}
+
+function loadWeights() {
+  const inputs = document.querySelectorAll('.weight-input');
+  inputs.forEach(input => {
+    const id = input.id.replace('w-', '');
+    const saved = localStorage.getItem('w_' + id);
+    if (saved) {
+      input.value = saved;
+      input.placeholder = saved + ' كيلو';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadWeights);
+
 // ---- PAGE SWITCHER ----
 function switchPage(p) {
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
