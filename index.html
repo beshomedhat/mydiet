@@ -72,6 +72,7 @@
   }
   .nav-btn.active-workout { background: var(--push); color: #fff; border-color: var(--push); }
   .nav-btn.active-diet { background: var(--orange); color: #000; border-color: var(--orange); }
+  .nav-btn.active-mobility { background: #a3e635; color: #000; border-color: #a3e635; }
 
   /* ===== PAGES ===== */
   .page { display: none; padding: 20px 14px 20px; }
@@ -589,6 +590,186 @@
     line-height: 1.6;
     margin-bottom: 9px;
   }
+
+  /* ===== MOBILITY CSS ===== */
+  .mob-intro {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .mob-intro h2 { font-size: 1.3rem; font-weight: 900; color: #a3e635; margin-bottom: 6px; }
+  .mob-intro p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+  .mob-timer-bar {
+    background: var(--card);
+    border: 1px solid #2a4a2a;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .mob-timer-bar h4 { font-size: 0.82rem; color: #a3e635; font-weight: 800; margin-bottom: 10px; }
+  .timer-display {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #a3e635;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .timer-btns { display: flex; gap: 8px; justify-content: center; }
+  .timer-btn {
+    background: #1a2a1a;
+    border: 1px solid #2a4a2a;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #a3e635;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .timer-btn:hover { background: #243a24; }
+  .timer-btn.reset { color: var(--muted); border-color: var(--border); background: var(--card2); }
+
+  .mob-exercise {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-right: 4px solid #a3e635;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .mob-exercise:hover { background: #161616; }
+  .mob-exercise.done { border-right-color: #444; opacity: 0.5; }
+  .mob-ex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .mob-ex-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+  .mob-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: #1a2a0a;
+    border: 1px solid #2a4a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 900;
+    color: #a3e635;
+    flex-shrink: 0;
+  }
+  .mob-ex-name { font-weight: 800; font-size: 0.92rem; }
+  .mob-ex-target { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .mob-duration {
+    background: #1a2a0a;
+    border: 1px solid #2a4a1a;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #a3e635;
+    white-space: nowrap;
+  }
+  .mob-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    margin-right: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: transparent;
+    transition: all 0.2s;
+  }
+  .mob-exercise.done .mob-check {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: #000;
+  }
+  .mob-tip {
+    font-size: 0.75rem;
+    color: #5a7a3a;
+    border-right: 2px solid #a3e635;
+    padding-right: 8px;
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+  .mob-yt {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #1a0a0a;
+    border: 1px solid #3a1010;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    color: #ff4444;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 8px;
+  }
+
+  .mob-progress {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .mob-progress-bar-wrap {
+    background: #1a1a1a;
+    border-radius: 20px;
+    height: 8px;
+    margin: 8px 0;
+    overflow: hidden;
+  }
+  .mob-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #a3e635, #22c55e);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .mob-progress-text { font-size: 0.8rem; color: var(--muted); }
+  .mob-progress-text span { color: #a3e635; font-weight: 800; }
+
+  .mob-section-label {
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 16px 0 8px;
+    padding-right: 4px;
+  }
+
+  .mob-reset-btn {
+    width: 100%;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+  }
+  .mob-reset-btn:hover { border-color: #a3e635; color: #a3e635; }
 </style>
 </head>
 <body>
@@ -598,6 +779,7 @@
   <div class="navbar-brand"><span>برنامج</span>mer24797 💪</div>
   <button class="nav-btn active-workout" id="nav-workout" onclick="switchPage('workout')">🏋️ التمرين</button>
   <button class="nav-btn" id="nav-diet" onclick="switchPage('diet')">🍽️ الدايت</button>
+  <button class="nav-btn" id="nav-mobility" onclick="switchPage('mobility')">🧘 Mobility</button>
 </div>
 
 <!-- ===== WORKOUT PAGE ===== -->
@@ -1098,8 +1280,8 @@
     <div class="ex-header">
       <div class="ex-num">4</div>
       <div class="ex-info">
-        <div class="ex-name">Leg Extension + Leg Curl</div>
-        <div class="ex-muscle">Isolation · عزل الأرجل</div>
+        <div class="ex-name">Leg Extension</div>
+        <div class="ex-muscle">Quads · أمام الفخد</div>
       </div>
     </div>
     <div class="ex-sets">
@@ -1107,28 +1289,63 @@
       <div class="set-box">12-15 <span>reps</span></div>
       <div class="set-box">راحة <span>60 ث</span></div>
     </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 30-40 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=leg+extension+machine+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-leg-extension" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('leg-extension', this.value)" />
+      <span class="weight-saved" id="ws-leg-extension"></span>
+    </div>
+  </div>
+
+  <div class="exercise legs">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-info">
+        <div class="ex-name">Lying Leg Curl</div>
+        <div class="ex-muscle">Hamstrings · خلف الفخد</div>
+      </div>
+    </div>
+    <div class="ex-sets">
+      <div class="set-box">3 <span>sets</span></div>
+      <div class="set-box">12-15 <span>reps</span></div>
+      <div class="set-box">راحة <span>60 ث</span></div>
+    </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 25-35 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=lying+leg+curl+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-leg-curl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('leg-curl', this.value)" />
+      <span class="weight-saved" id="ws-leg-curl"></span>
+    </div>
   </div>
 
   <div class="section-label">🎯 Core</div>
 
   <div class="exercise legs">
     <div class="ex-header">
-      <div class="ex-num">5</div>
+      <div class="ex-num">6</div>
       <div class="ex-info">
-        <div class="ex-name">Plank</div>
-        <div class="ex-muscle">Core · الثبات</div>
+        <div class="ex-name">RKC Plank</div>
+        <div class="ex-muscle">Core · الثبات الكامل</div>
       </div>
     </div>
     <div class="ex-sets">
-      <div class="set-box">3 <span>sets</span></div>
-      <div class="set-box">45-60 <span>ثانية</span></div>
+      <div class="set-box">2 <span>sets</span></div>
+      <div class="set-box">2 <span>دقيقة</span></div>
       <div class="set-box">راحة <span>45 ث</span></div>
     </div>
+    <div class="ex-meta">
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=RKC+plank+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="ex-tip">⚡ اعصر كل عضلة في جسمك — إيديك مشبوكين وجسمك متوتر كامل. أصعب بكتير من الـ Plank العادي.</div>
   </div>
 
   <div class="exercise legs">
     <div class="ex-header">
-      <div class="ex-num">6</div>
+      <div class="ex-num">7</div>
       <div class="ex-info">
         <div class="ex-name">Cable Crunch أو Hanging Leg Raise</div>
         <div class="ex-muscle">Abs · البطن</div>
@@ -1139,7 +1356,16 @@
       <div class="set-box">15 <span>reps</span></div>
       <div class="set-box">راحة <span>45 ث</span></div>
     </div>
+    <div class="ex-meta">
+      <span class="weight-badge">🏋️ ابدأ بـ 15-20 كيلو</span>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=cable+crunch+abs+tutorial" target="_blank">▶ YouTube</a>
+    </div>
+    <div class="weight-log">
+      <input type="number" class="weight-input" id="w-cable-crunch" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('cable-crunch', this.value)" />
+      <span class="weight-saved" id="ws-cable-crunch"></span>
+    </div>
     <div class="ex-tip">⚡ البطن بيظهر بالأكل مش بالتمرين - لكن التمرين بيقوي الـ core وبيساعد الوضعية.</div>
+  </div>
   </div>
 
   <div class="cardio-box">
@@ -1181,10 +1407,6 @@
     </div>
     <div class="ex-tip">⚡ الدمبل بيدي مدى حركة أكبر من البار وبيشغّل كل جزء في الصدر.</div>
   </div>
-    <div class="weight-log">
-      <input type="number" class="weight-input" id="w-leg-ext-curl" placeholder="آخر وزن لعبته (كيلو)" oninput="saveWeight('leg-ext-curl', this.value)" />
-      <span class="weight-saved" id="ws-leg-ext-curl"></span>
-    </div>
 
   <div class="exercise push">
     <div class="ex-header">
@@ -1850,6 +2072,7 @@ function switchPage(p) {
   document.getElementById('page-' + p).classList.add('active');
   document.getElementById('nav-workout').className = 'nav-btn' + (p==='workout' ? ' active-workout' : '');
   document.getElementById('nav-diet').className = 'nav-btn' + (p==='diet' ? ' active-diet' : '');
+  document.getElementById('nav-mobility').className = 'nav-btn' + (p==='mobility' ? ' active-mobility' : '');
   window.scrollTo(0,0);
 }
 
@@ -1868,6 +2091,270 @@ function showDiet(d, btn) {
   document.getElementById('diet-' + d).classList.add('active');
   if (btn) btn.classList.add('active');
 }
+
+// ---- MOBILITY ----
+let timerInterval = null;
+let timerSeconds = 0;
+let timerRunning = false;
+
+function startStopTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('timer-start-btn').textContent = '▶ استأنف';
+  } else {
+    timerRunning = true;
+    document.getElementById('timer-start-btn').textContent = '⏸ وقف';
+    timerInterval = setInterval(() => {
+      timerSeconds++;
+      const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const s = String(timerSeconds % 60).padStart(2, '0');
+      document.getElementById('timer-display').textContent = m + ':' + s;
+    }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSeconds = 0;
+  document.getElementById('timer-display').textContent = '00:00';
+  document.getElementById('timer-start-btn').textContent = '▶ ابدأ';
+}
+
+function toggleDone(el) {
+  el.classList.toggle('done');
+  const check = el.querySelector('.mob-check');
+  check.textContent = el.classList.contains('done') ? '✓' : '';
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.mob-exercise').length;
+  const done = document.querySelectorAll('.mob-exercise.done').length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('mob-progress-bar').style.width = pct + '%';
+  document.getElementById('mob-done-count').textContent = done;
+  document.getElementById('mob-total-count').textContent = total;
+  document.getElementById('mob-pct').textContent = pct + '%';
+}
+
+function resetMobility() {
+  document.querySelectorAll('.mob-exercise').forEach(el => {
+    el.classList.remove('done');
+    const check = el.querySelector('.mob-check');
+    if (check) check.textContent = '';
+  });
+  resetTimer();
+  updateProgress();
+}
+
+document.addEventListener('DOMContentLoaded', updateProgress);
 </script>
+
+<!-- ===== MOBILITY PAGE ===== -->
+<div class="page" id="page-mobility">
+  <br>
+
+  <div class="mob-intro">
+    <h2>🧘 Mobility & Flexibility</h2>
+    <p>10 دقايق يومياً · في البيت · بدون معدات<br>بيصلح الـ Anterior Pelvic Tilt وبيحسن الأداء في الجيم</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="mob-progress">
+    <div class="mob-progress-text">اتعمل <span id="mob-done-count">0</span> من <span id="mob-total-count">10</span> تمارين · <span id="mob-pct">0%</span></div>
+    <div class="mob-progress-bar-wrap">
+      <div class="mob-progress-bar" id="mob-progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- TIMER -->
+  <div class="mob-timer-bar">
+    <h4>⏱️ تايمر الجلسة</h4>
+    <div class="timer-display" id="timer-display">00:00</div>
+    <div class="timer-btns">
+      <button class="timer-btn" id="timer-start-btn" onclick="startStopTimer()">▶ ابدأ</button>
+      <button class="timer-btn reset" onclick="resetTimer()">↺ ريست</button>
+    </div>
+  </div>
+
+  <!-- SECTION 1: HIP & PELVIS -->
+  <div class="mob-section-label">🦴 Hip & Pelvis — لإصلاح الـ Anterior Pelvic Tilt</div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">1</div>
+        <div>
+          <div class="mob-ex-name">90/90 Hip Stretch</div>
+          <div class="mob-ex-target">Hip Flexors + External Rotators</div>
+        </div>
+      </div>
+      <div class="mob-duration">60 ث × جنبين</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ أهم تمرين للـ Pelvic Tilt — اقعد على الأرض برجليك على شكل 90/90 واضغط الورك للأرض.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=90+90+hip+stretch+tutorial" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">2</div>
+        <div>
+          <div class="mob-ex-name">Kneeling Hip Flexor Stretch</div>
+          <div class="mob-ex-target">Hip Flexors · Psoas</div>
+        </div>
+      </div>
+      <div class="mob-duration">45 ث × جنبين</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ ركبة على الأرض، رجل أمام، ادفع الورك للأمام وحس بالـ stretch في أمام الفخد.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=kneeling+hip+flexor+stretch" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">3</div>
+        <div>
+          <div class="mob-ex-name">Glute Bridge</div>
+          <div class="mob-ex-target">Glutes + Core · تفعيل المؤخرة</div>
+        </div>
+      </div>
+      <div class="mob-duration">15 rep × 2 set</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ استلقي على ضهرك، ارفع وركك للسقف واعصر المؤخرة فوق. بيصلح الـ Pelvic Tilt بشكل كبير.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=glute+bridge+tutorial" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <!-- SECTION 2: THORACIC & SHOULDER -->
+  <div class="mob-section-label">🫁 Thoracic & Shoulder — فتح الصدر وتحسين الوضعية</div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">4</div>
+        <div>
+          <div class="mob-ex-name">Thoracic Spine Rotation</div>
+          <div class="mob-ex-target">Upper Back · الظهر العلوي</div>
+        </div>
+      </div>
+      <div class="mob-duration">10 rep × جنبين</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ اقعد على الأرض ببرجلك مثنيين، دور الجذع يمين وشمال ببطء. بيحسن الـ Bench Press والـ OHP.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=thoracic+spine+rotation+mobility" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">5</div>
+        <div>
+          <div class="mob-ex-name">Cat-Cow</div>
+          <div class="mob-ex-target">Spine · العمود الفقري كامل</div>
+        </div>
+      </div>
+      <div class="mob-duration">10 rep بطيء</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ على إيديك وركبك، بدّل بين تقعير وتقويس الظهر ببطء مع التنفس. أفضل تمرين للصباح.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=cat+cow+stretch+tutorial" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">6</div>
+        <div>
+          <div class="mob-ex-name">Wall Angels</div>
+          <div class="mob-ex-target">Shoulder + Upper Back · وضعية الكتف</div>
+        </div>
+      </div>
+      <div class="mob-duration">10 rep بطيء</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ وقف على الحيطة وحرّك إيديك زي ملاك. لو صعب تلزق الإيدين بالحيطة، ده بيقولك الكتف محتاج شغل.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=wall+angels+posture+tutorial" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <!-- SECTION 3: HAMSTRING & ANKLE -->
+  <div class="mob-section-label">🦵 Hamstring & Ankle — تحسين الـ Squat والـ Deadlift</div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">7</div>
+        <div>
+          <div class="mob-ex-name">Standing Hamstring Stretch</div>
+          <div class="mob-ex-target">Hamstrings · مرونة خلف الفخد</div>
+        </div>
+      </div>
+      <div class="mob-duration">45 ث × جنبين</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ رجل على حاجة عالية شوية، ابسط الركبة وانحني للأمام. بيحسن الـ RDL والـ Deadlift بشكل كبير.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=standing+hamstring+stretch+tutorial" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">8</div>
+        <div>
+          <div class="mob-ex-name">Deep Squat Hold</div>
+          <div class="mob-ex-target">Hips + Ankles + Spine</div>
+        </div>
+      </div>
+      <div class="mob-duration">60 ث</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ اقعد سكوات عميق وثبّت الوضعية. لو بتوقع للخلف، مسك بحاجة قدامك. بيحسن Squat بشكل ملحوظ.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=deep+squat+hold+mobility" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <!-- SECTION 4: COOL DOWN -->
+  <div class="mob-section-label">😮‍💨 Cool Down — تهدئة وتنفس</div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">9</div>
+        <div>
+          <div class="mob-ex-name">Child's Pose</div>
+          <div class="mob-ex-target">Lower Back + Hips · استرخاء</div>
+        </div>
+      </div>
+      <div class="mob-duration">60 ث</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ ركبك على الأرض، مد إيديك للأمام وحط صدرك على الأرض. تنفس ببطء وحس بالاسترخاء.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=child+pose+yoga+stretch" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <div class="mob-exercise" onclick="toggleDone(this)">
+    <div class="mob-ex-header">
+      <div class="mob-ex-left">
+        <div class="mob-num">10</div>
+        <div>
+          <div class="mob-ex-name">Box Breathing — تنفس</div>
+          <div class="mob-ex-target">Nervous System · تهدئة وتركيز</div>
+        </div>
+      </div>
+      <div class="mob-duration">4 دورات</div>
+      <div class="mob-check"></div>
+    </div>
+    <div class="mob-tip">⚡ شهيق 4 ثواني، ثبّت 4، زفير 4، ثبّت 4. بيهدي الجهاز العصبي وبيساعد على النوم. افعله قبل النوم.</div>
+    <a class="mob-yt" href="https://www.youtube.com/results?search_query=box+breathing+technique" target="_blank" onclick="event.stopPropagation()">▶ YouTube</a>
+  </div>
+
+  <button class="mob-reset-btn" onclick="resetMobility()">↺ إعادة تشغيل الجلسة</button>
+
+</div>
+
+<script>
 </body>
 </html>
