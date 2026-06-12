@@ -74,6 +74,47 @@
   .nav-btn.active-diet { background: var(--orange); color: #000; border-color: var(--orange); }
   .nav-btn.active-mobility { background: #a3e635; color: #000; border-color: #a3e635; }
 
+  /* Mobile: bottom nav */
+  @media (max-width: 500px) {
+    .navbar {
+      position: fixed;
+      top: auto;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 62px;
+      border-top: 1px solid var(--border);
+      border-bottom: none;
+      padding: 0 8px;
+      justify-content: space-around;
+      gap: 4px;
+    }
+    .navbar-brand { display: none; }
+    .nav-btn {
+      flex: 1;
+      text-align: center;
+      border-radius: 12px;
+      padding: 8px 6px;
+      font-size: 0.72rem;
+      border: none;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .nav-btn.active-workout { background: transparent; color: var(--push); border: none; }
+    .nav-btn.active-diet { background: transparent; color: var(--orange); border: none; }
+    .nav-btn.active-mobility { background: transparent; color: #a3e635; border: none; }
+    .nav-icon { font-size: 1.3rem; }
+    .nav-label { font-size: 0.68rem; }
+    body { padding-bottom: 70px; padding-top: 0; }
+    .page { padding-top: 16px; }
+  }
+
+  @media (min-width: 501px) {
+    .nav-icon { margin-left: 4px; }
+  }
+
   /* ===== PAGES ===== */
   .page { display: none; padding: 20px 14px 20px; }
   .page.active { display: block; }
@@ -777,9 +818,9 @@
 <!-- NAVBAR -->
 <div class="navbar">
   <div class="navbar-brand"><span>برنامج</span>mer24797 💪</div>
-  <button class="nav-btn active-workout" id="nav-workout" onclick="switchPage('workout')">🏋️ التمرين</button>
-  <button class="nav-btn" id="nav-diet" onclick="switchPage('diet')">🍽️ الدايت</button>
-  <button class="nav-btn" id="nav-mobility" onclick="switchPage('mobility')">🧘 Mobility</button>
+  <button class="nav-btn active-workout" id="nav-workout" onclick="switchPage('workout')"><span class="nav-icon">🏋️</span><span class="nav-label">التمرين</span></button>
+  <button class="nav-btn" id="nav-diet" onclick="switchPage('diet')"><span class="nav-icon">🍽️</span><span class="nav-label">الدايت</span></button>
+  <button class="nav-btn" id="nav-mobility" onclick="switchPage('mobility')"><span class="nav-icon">🧘</span><span class="nav-label">Mobility</span></button>
 </div>
 
 <!-- ===== WORKOUT PAGE ===== -->
